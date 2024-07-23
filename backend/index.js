@@ -1,11 +1,35 @@
-require('dotenv').config()
 const express = require('express')
-const app = express()
+require('dotenv').config()
+const app = express();
+const mongoose = require('mongoose')
+const bodyParser = require('body-parser')
+const cors = require('cors')
+const userController = require('./controllers/user')
 
+// Express Settings
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true
+}))
+app.use(bodyParser.json())
+
+
+// Routes
+app.use('/user', userController)
+
+
+// DB Connection
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => console.log('DB connected'))
+    .catch(err => console.log(err))
+
+
+// Listen for Connections
+const PORT = `${process.env.PORT}`
 
 try {
-    app.listen(process.env.PORT, () => {
-        console.log(` 🐚 Listening on ${process.env.PORT} `)
+    app.listen(PORT, () => {
+        console.log(`🐚 Listening on ${PORT}`)
     })
 } catch (error) {
     console.log('error:', error)
