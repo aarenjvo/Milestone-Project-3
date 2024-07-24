@@ -1,6 +1,6 @@
 function Edit () {
     return (
-        <p>Placeholder</p>
+        <p>Begin your post here...</p>
     )
 }
 
