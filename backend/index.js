@@ -13,6 +13,9 @@ app.use(cors({
 }))
 app.use(bodyParser.json())
 
+// Middleware
+app.use(express.json())
+
 
 // Routes
 app.use('/user', userController)
