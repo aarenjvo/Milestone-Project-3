@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react"
-import { useHistory, useParams } from "react-router"
+import { useNavigate, useParams } from "react-router"
 
 function Signup() {
-    const history = useHistory()
+    const navigate = useNavigate()
 
     const [user, setUser] = useState({
         username: '',
@@ -21,8 +21,7 @@ function Signup() {
             },
             body: JSON.stringify(user)
         })
-
-        history.push(`/`)
+        navigate('/')
     }
 
     return (
@@ -85,5 +84,4 @@ function Signup() {
         </main >
     )
 }
-
-module.exports = Signup
+export default Signup
