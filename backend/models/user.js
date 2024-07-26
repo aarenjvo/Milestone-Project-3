@@ -11,10 +11,37 @@ const userSchema = new mongoose.Schema({
         required: true,
         min: 0
     },
-    profilePicture: {
+    email: {
         type: String,
-        default: 'https://static01.nyt.com/images/2021/09/14/science/07CAT-STRIPES/07CAT-STRIPES-mediumSquareAt3X-v2.jpg'
+        required: true,
+        unique: true
+    },
+    password: {
+        type: String,
+        required: true
     }
 })
 
-module.exports = mongoose.model('User', userSchema)
+userSchema.pre('save', function (next) {
+    if (this.isModified('password')) {
+        bcrypt.hash(this.password, 8, (err, hash) => {
+            if (err) return next(err);
+
+            this.password = hash;
+            next();
+        })
+    }
+})
+
+userSchema.methods.comparePassword = async function (password) {
+    if (!password) throw new Error('Password is missing, retreat!!');
+
+    try {
+        const result = await bcrypt.compare(password, this.password)
+        return result;
+    } catch (error) {
+        console.log('Error while comparing password!', error.message)
+    }
+}
+
+    module.exports = mongoose.model('User', userSchema)
