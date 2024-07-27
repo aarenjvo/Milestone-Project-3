@@ -8,12 +8,11 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-        const { id } = req.params
-        const user = await User.findById(id)
-        res.json(user)
+        const user = await User.find({_id:req.params.id}).populate({path: 'blogposts', select: ['title', 'description']})
+        res.status(200).json(user)
     } catch (error) {
         console.log('Error', error)
-        res.status(500).json({ message: 'error retrieving user' })
+        res.status(400).json({ message: 'error retrieving user' })
     }
 })
 
@@ -25,6 +24,17 @@ router.post('/', async (req, res) => {
     } catch (error) {
         console.log('Error', error)
         res.status(500).json({ message: 'error creating user' })
+    }
+})
+
+router.put('/:id', async (req, res) => {
+    try {
+        const { id } = req.params
+        await User.findByIdAndUpdate(id, req.body)
+        res.json({ message: 'user updated'})
+    } catch (error) {
+        console.log('Error', error)
+        res.status(500).json({ message: 'error updating user'})
     }
 })
 
