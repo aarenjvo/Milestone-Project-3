@@ -19,7 +19,7 @@ function Create({ onClose, onCreate }) {
     };
 
     return (
-        <div className="create-popup">
+        <div className="create-popup"style={{ backgroundColor: '#0d3555' }}>
             <div>
                 <h2>Create New Document</h2>
             </div>
