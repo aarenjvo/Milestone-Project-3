@@ -5,13 +5,15 @@ const app = express();
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const cors = require('cors')
-const userController = require('./controllers/user')
+const userController = require('./controllers/user');
+const blogPostController = require('./controllers/blogPost');
 
 // Express Settings
 app.use(cors({
     origin: 'http://localhost:3000',
     credentials: true
 }))
+
 app.use(bodyParser.json())
 
 // Middleware
@@ -26,6 +28,7 @@ app.engine('jsx', require('express-react-views').createEngine())
 
 // Routes
 app.use('/user', userController)
+app.use('/blog', blogPostController)
 
 
 // DB Connection
