@@ -23,11 +23,23 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    verified: {
+        type: Boolean,
+        default: false
+    },
+    verificationCode: {
+        type: String,
+        required: false
+    },
+    admin: {
+        type: Boolean,
+        default: false
     }
 },
-{
-    toJSON: { virtuals: true }
-})
+{toJSON: { virtuals: true }},
+{timestamps: true}
+)
 
 userSchema.virtual('blogposts', {
     ref: 'BlogPost',

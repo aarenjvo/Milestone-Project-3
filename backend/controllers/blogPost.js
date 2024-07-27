@@ -10,7 +10,8 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-        const blogById = await BlogPost.find({_id:req.params.id}).populate({path: 'user', select: ['username', 'age', 'email']})
+        const { id } = req.params
+        const blogById = await BlogPost.findById(id).populate({path: 'users', select: ['username', 'age', 'email']})
         res.status(200).json(blogById)
     } catch (error) {
         res.status(400).json(error)

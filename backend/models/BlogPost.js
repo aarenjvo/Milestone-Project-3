@@ -13,11 +13,11 @@ const blogPostSchema = new mongoose.Schema({
         type: String,
         required: true
     }
-},{
-    toJSON: { virtuals: true }
-})
+},
+{toJSON: { virtuals: true }}
+)
 
-blogPostSchema.virtual('user', {
+blogPostSchema.virtual('users', {
     ref: 'User',
     localField: '_id',
     foreignField: 'blogPostId'
