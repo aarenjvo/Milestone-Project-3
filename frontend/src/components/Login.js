@@ -1,6 +1,7 @@
 import { useContext, useState } from "react"
 import { useNavigate } from "react-router"
 import { CurrentUser } from "../contexts/CurrentUser"
+import Main from '../views/main'
 
 function Login() {
 
@@ -29,9 +30,10 @@ function Login() {
         const data = await response.json()
         console.log(data)
 
-        if (response.status === 200) {
+        if (response.status == 201) {
             setCurrentUser(data.user)
-            navigate(`/`)
+            console.log('Successfully logged in user!')
+            navigate('/Main')
         } else {
             setErrorMessage(data.message)
         }
