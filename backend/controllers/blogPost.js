@@ -18,7 +18,7 @@ router.get('/:id', async (req, res) => {
     }
 })
 
-router.post('/', async (req, res) => {
+router.post('/post', async (req, res) => {
     try {
         const blogPost = await new BlogPost(req.body).save()
         res.json(blogPost)

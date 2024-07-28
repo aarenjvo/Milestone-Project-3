@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const User = require('../models/User')
+const jwt = require('jsonwebtoken')
 
 router.get('/', async (req, res) => {
     const users = await User.find()
@@ -19,7 +20,7 @@ router.get('/:id', async (req, res) => {
 
 router.post('/register', async (req, res) => {
     try {
-        const { username, email, password } = req.body
+        const { username, email, password, ...rest} = req.body
         let user = await User.findOne({ email })
 
         if (user) {
@@ -27,17 +28,26 @@ router.post('/register', async (req, res) => {
         }
 
         user = await new User(req.body).save()
+
+        // generate a token
+        const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET,{
+            expiresIn: '1d',
+        })
+
         return res.status(201).json({
+            user: {
             _id: user._id,
             username: user.username,
             age: user.age,
             email: user.email,
             verified: user.verified,
             admin: user.admin,
-            token: null
-        })
+        }, 
+        token
+    })
 
     } catch (error) {
+        console.log('error:', error)
         return res.status(500).json({ message: 'error creating user' })
     }
 })
