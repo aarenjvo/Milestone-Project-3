@@ -22,7 +22,7 @@ function Login() {
 
         if (response.ok) {
             console.log('Successfully logged in!');
-            navigate(`/`);  
+            navigate(`/Main`);  
         } else {
             console.error('Failed to log in');
         }
