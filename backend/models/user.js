@@ -1,4 +1,6 @@
 const mongoose = require('mongoose')
+const bcrypt = require('bcrypt')
+
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -17,12 +19,14 @@ const userSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: true,
+        required: [true, "Email is required"],
         unique: true
     },
     password: {
         type: String,
-        required: true
+        required: [true, "A password is required"],
+        minLength: [5, "Password must be at least 5 characters"],
+        maxLength: [12, "Password is a maximum of 12 characters"]
     },
     verified: {
         type: Boolean,
@@ -37,8 +41,8 @@ const userSchema = new mongoose.Schema({
         default: false
     }
 },
-{toJSON: { virtuals: true }},
-{timestamps: true}
+    { toJSON: { virtuals: true } },
+    { timestamps: true }
 )
 
 userSchema.virtual('blogposts', {
@@ -47,16 +51,11 @@ userSchema.virtual('blogposts', {
     foreignField: 'user_id'
 })
 
-// userSchema.pre('save', function (next) {
-//     if (this.isModified('password')) {
-//         bcrypt.hash(this.password, 8, (err, hash) => {
-//             if (err) return next(err);
-
-//             this.password = hash;
-//             next();
-//         })
-//     }
-// })
+userSchema.pre('save', async function (next){
+    const salt = await bcrypt.genSalt()
+    this.password = await bcrypt.hash(this.password, salt)
+    next()
+})
 
 // userSchema.methods.comparePassword = async function (password) {
 //     if (!password) throw new Error('Password is missing, retreat!!');
@@ -69,4 +68,4 @@ userSchema.virtual('blogposts', {
 //     }
 // }
 
-    module.exports = mongoose.model('User', userSchema)
+module.exports = mongoose.model('User', userSchema)
