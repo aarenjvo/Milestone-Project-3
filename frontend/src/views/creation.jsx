@@ -1,44 +1,29 @@
+import { useState, useEffect } from "react";
+import BlogList from "./BlogList";
 
+const Creation = () => {
+  const [blogs, setBlogs] = useState([
+    { title: "Introducing myself", body: "lorem ipsum...", author: "Anthony", id: 1 },
+    { title: "Introducing myself", body: "lorem ipsum...", author: "TJ", id: 2 },
+    { title: "Introducing myself", body: "lorem ipsum...", author: "Aaren", id: 3 },
+    { title: "Introducing myself", body: "lorem ipsum...", author: "Freddy", id: 4 }
+  ]);
 
-function Creation() {
+  const handleDelete = (id) => {
+    const newBlogs = blogs.filter(blog => blog.id !== id);
+    setBlogs(newBlogs);
 
-  return(
-    <div>
-      <header class="header">
-        <h1>Blog Postings</h1>
-      </header>
-      <main class="main">
-        <form id="blogPostings">
-          <input type="text" name="name" placeholder="Thoughts..."></input>
-          <button type="submit" name="submit" value="submit">Submit</button>
-        </form>
-      </main>
-      <div>
-        <ul>
-          <li>
-            <span>Anthony</span>
-            <button>Edit</button>
-            <button>Remove</button>
-          </li>
-          <li>
-          <span>Aaren</span>
-            <button>Edit</button>
-            <button>Remove</button>
-          </li>
-          <li>
-          <span>TJ</span>
-            <button>Edit</button>
-            <button>Remove</button>
-            <li>
-            <span>Freddy</span>
-            <button>Edit</button>
-            <button>Remove</button>
-            </li>
-          </li>
-        </ul>
-      </div>
+  }
+
+  useEffect(() => {
+    console.log('use effect ran')
+  }, []);
+
+  return (
+    <div className="creation">
+      <BlogList blogs={blogs} title="All Blogs:" handleDelete={handleDelete} />
     </div>
   )
 }
 
-export default Creation
+export default Creation;
