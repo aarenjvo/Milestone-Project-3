@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import Create from "../components/Create";
 import Signup from "../components/Signup";
-import Login from '../components/Login'
-
+import Login from '../components/Login';
 
 function Home() {
   const [showCreatePopup, setShowCreatePopup] = useState(false);
@@ -37,16 +36,18 @@ function Home() {
 
   const handleLoginClick = () => {
     setShowLoginPopup(true);
-  }
+  };
 
   const handleCloseLoginPopup = () => {
     setShowLoginPopup(false);
-  }
+  };
 
-  const handleLogin = (LoginData) => {
-    console.log("User logged in:", LoginData)
-    setShowLoginPopup(false)
-  }
+  const handleLogin = (loginData) => {
+    console.log("User logged in:", loginData);
+    setShowLoginPopup(false);
+  };
+
+  const isPopupVisible = showCreatePopup || showSignUpPopup || showLoginPopup;
 
   return (
     <div>
@@ -61,13 +62,14 @@ function Home() {
         <h1>Welcome!</h1>
         <h3>This is a project created by Freddy Diaz, Aaren Vo, Anthony Deguire, and Tj Jones</h3>
       </div>
+      {isPopupVisible && <div className="overlay show" />}
       {showCreatePopup && (
         <Create onClose={handleCloseCreatePopup} onCreate={handleCreateDocument} />
       )}
       {showSignUpPopup && (
         <Signup onClose={handleCloseSignUpPopup} onSignUp={handleSignUp} />
       )}
-       {showLoginPopup && (
+      {showLoginPopup && (
         <Login onClose={handleCloseLoginPopup} onLogin={handleLogin} />
       )}
     </div>
