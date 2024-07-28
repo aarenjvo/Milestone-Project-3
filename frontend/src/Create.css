@@ -1,0 +1,64 @@
+.create-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -35%);
+    background-color: #0d3555;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-height: 400px;
+    max-width: 325px;
+    width: 100%;
+    box-sizing: border-box;
+    color: #fff;
+    margin-bottom: 12px;
+}
+
+.create-header {
+    margin-bottom: 12px;
+    margin-top: 2px;
+}
+
+.create-field {
+    margin-bottom: 12px;
+}
+
+.create-field label {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.create-field input,
+.create-field select {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+}
+
+.create-settings h3 {
+    margin: 0;
+}
+
+.create-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.create-button {
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #fff;
+}
+
+.create-button-green {
+    background-color: #006400;
+}
+
+.create-button-gray {
+    background-color: #6c757d;
+}

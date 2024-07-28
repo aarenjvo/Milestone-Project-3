@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import '../Create.css';
 
 function Create({ onClose, onCreate }) {
     const [documentName, setDocumentName] = useState('');
@@ -6,7 +7,6 @@ function Create({ onClose, onCreate }) {
     const [access, setAccess] = useState('Public');
 
     const handleCreateClick = () => {
-
         const documentData = {
             documentName,
             font,
@@ -19,11 +19,11 @@ function Create({ onClose, onCreate }) {
     };
 
     return (
-        <div className="create-popup"style={{ backgroundColor: '#0d3555' }}>
-            <div>
+        <div className="create-popup">
+            <div className="create-header">
                 <h2>Create New Document</h2>
             </div>
-            <div>
+            <div className="create-field">
                 <label htmlFor="documentName">Document Name:</label>
                 <input
                     type="text"
@@ -32,28 +32,42 @@ function Create({ onClose, onCreate }) {
                     onChange={(e) => setDocumentName(e.target.value)}
                 />
             </div>
-            <div>
+            <div className="create-settings">
                 <h3>Settings Selection</h3>
-                <div>
+                <div className="create-field">
                     <label htmlFor="font">Font:</label>
-                    <select id="font" value={font} onChange={(e) => setFont(e.target.value)}>
+                    <select
+                        id="font"
+                        value={font}
+                        onChange={(e) => setFont(e.target.value)}
+                    >
                         <option value="Arial">Arial</option>
                         <option value="Times New Roman">Times New Roman</option>
                         <option value="Courier New">Courier New</option>
                     </select>
                 </div>
-                <div>
+                <div className="create-field">
                     <label htmlFor="access">Access:</label>
-                    <select id="access" value={access} onChange={(e) => setAccess(e.target.value)}>
+                    <select
+                        id="access"
+                        value={access}
+                        onChange={(e) => setAccess(e.target.value)}
+                    >
                         <option value="Public">Public</option>
                         <option value="Private">Private</option>
                     </select>
                 </div>
             </div>
-            <button onClick={handleCreateClick}>Create Document</button>
-            <button onClick={onClose}>Cancel</button>
+            <div className="create-buttons">
+                <button onClick={handleCreateClick} className="create-button create-button-green">
+                    Create Document
+                </button>
+                <button onClick={onClose} className="create-button create-button-gray">
+                    Cancel
+                </button>
+            </div>
         </div>
     );
 }
 
-export default Create
+export default Create;
