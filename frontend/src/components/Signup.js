@@ -14,14 +14,14 @@ function Signup() {
     async function handleSubmit(e) {
         e.preventDefault()
 
-        await fetch(`http://localhost:5001/user/`, {
+        await fetch(`http://localhost:5001/user/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(user)
-        })
-        navigate('/')
+        }, console.log('Successfully created user!'))
+        navigate(`/`)
     }
 
     return (
@@ -37,8 +37,8 @@ function Signup() {
                                 value={user.username}
                                 onChange={e => setUser({ ...user, username: e.target.value })}
                                 className="form-control"
-                                id="firstName"
-                                name="firstName"
+                                id="username"
+                                name="username"
                             />
                         </div>
                         <div className="col-sm-6 form-group">
