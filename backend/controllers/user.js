@@ -64,7 +64,7 @@ router.post('/login', async (req, res) => {
                     process.env.JWT_SECRET,
                     {
                         expiresIn: '1d',
-                    }
+                    },
                 )
                 res.status(201).json({
                     user: {
@@ -86,6 +86,7 @@ router.post('/login', async (req, res) => {
         res.status(500).json({ message: 'Login failed' })
     }
 })
+
 
 router.put('/:id', async (req, res) => {
     try {
