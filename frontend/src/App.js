@@ -6,6 +6,7 @@ import Creation from './views/creation';
 import SignUp from './components/Signup'
 import Login from './components/Login'
 import CurrentUserProvider from './contexts/CurrentUser';
+import Main from './views/main';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route exact path="/sign-up" component={SignUp} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/Creation" element={<Creation />} />
+            <Route exact path="/Main" element={<Main/>} />
           </Routes>
         </Router>
       </CurrentUserProvider>
