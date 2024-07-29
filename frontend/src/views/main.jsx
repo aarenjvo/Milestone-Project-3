@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import Create from "../components/Create";
+import { useNavigate } from "react-router-dom"; 
 import { FacebookShareButton, TwitterShareButton, FacebookIcon, TwitterIcon } from 'react-share';
 
 function Main() {
+  const navigate = useNavigate();
     const [showCreatePopup, setShowCreatePopup] = useState(false);
     
   const handleCreateClick = () => {
@@ -18,12 +20,17 @@ function Main() {
     setShowCreatePopup(false);
   };
 
+  const handleViewPostsClick = () => {
+    navigate('/view'); // Navigate to /view route
+  };
+
+
   const currentPageUrl = "/main";
     return (
         <div>
             <nav> <a href="#" onClick={handleCreateClick}><h3>Make your creation</h3></a>
             <div className="title"><h2>TupGPT</h2></div>
-            <h3>View Posts</h3>
+            <a href="#" onClick={handleViewPostsClick}><h3>View Posts</h3></a>
             </nav>
             <div className="welcome">
             <h1>Welcome!</h1>
