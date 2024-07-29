@@ -7,6 +7,7 @@ import SignUp from './components/Signup'
 import Login from './components/Login'
 import CurrentUserProvider from './contexts/CurrentUser';
 import Main from './views/main';
+import BlogList from './views/BlogList';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             <Route exact path="/login" component={Login} />
             <Route exact path="/Creation" element={<Creation />} />
             <Route exact path="/Main" element={<Main/>} />
+            <Route exact path="/view"element={<BlogList/>}/>
           </Routes>
         </Router>
       </CurrentUserProvider>
