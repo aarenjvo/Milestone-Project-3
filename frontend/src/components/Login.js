@@ -32,6 +32,7 @@ function Login({onClose}) {
             setCurrentUser(data.user);
             console.log('Successfully logged in user!');
             navigate('/Main');
+            return data.user
         } else {
             setErrorMessage(data.message);
         }

@@ -2,6 +2,7 @@ const router = require('express').Router()
 const User = require('../models/User')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
+// const verifyToken = require('../middleware/auth')
 
 router.get('/', async (req, res) => {
     const users = await User.find()
@@ -52,7 +53,7 @@ router.post('/register', async (req, res) => {
     }
 })
 
-router.post('/login', async (req, res) => {
+router.post('/login', async (req, res, next) => {
     const { email, password } = req.body
     try {
         const user = await User.findOne({ email })
@@ -60,17 +61,19 @@ router.post('/login', async (req, res) => {
             const passwordMatch = await bcrypt.compare(password, user.password)
             if (passwordMatch) {
                 const token = jwt.sign(
-                    { id: user._id, email: user.email },
+                    { _id: user._id, email: user.email },
                     process.env.JWT_SECRET,
                     {
                         expiresIn: '1d',
                     },
                 )
+                // delete user.password
                 res.status(201).json({
                     user: {
                         _id: user._id,
                         email: user.email,
-                        password: user.password
+                        username: user.username,
+                        password: user.password,
                     },
                     token,
                 })

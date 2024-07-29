@@ -7,6 +7,7 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const userController = require('./controllers/user');
 const blogPostController = require('./controllers/blogPost');
+const verifyToken = require('./middleware/auth')
 
 // Express Settings
 app.use(cors({
