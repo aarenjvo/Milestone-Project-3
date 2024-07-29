@@ -2,6 +2,8 @@ const router = require('express').Router()
 const User = require('../models/User')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
+const auth = require('../middleware/auth')
+require('dotenv').config()
 // const verifyToken = require('../middleware/auth')
 
 router.get('/', async (req, res) => {
@@ -32,7 +34,7 @@ router.post('/register', async (req, res) => {
         user = await new User(req.body).save()
 
         // generate a token
-        const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, {
+        const token = jwt.sign({ id: user._id, }, process.env.JWT_SECRET, {
             expiresIn: '1d',
         })
 
@@ -53,7 +55,7 @@ router.post('/register', async (req, res) => {
     }
 })
 
-router.post('/login', async (req, res, next) => {
+router.post('/login', auth, async (req, res, next) => {
     const { email, password } = req.body
     try {
         const user = await User.findOne({ email })
@@ -61,22 +63,27 @@ router.post('/login', async (req, res, next) => {
             const passwordMatch = await bcrypt.compare(password, user.password)
             if (passwordMatch) {
                 const token = jwt.sign(
-                    { _id: user._id, email: user.email },
+                    { id: user._id, email: user.email },
                     process.env.JWT_SECRET,
                     {
                         expiresIn: '1d',
                     },
                 )
-                // delete user.password
-                res.status(201).json({
-                    user: {
-                        _id: user._id,
-                        email: user.email,
-                        username: user.username,
-                        password: user.password,
-                    },
+
+                user.token = token
+                user.password = undefined
+
+                // cookie section
+                const options = {
+                    expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+                    httpOnly: true
+                }
+                res.status(201).cookie('token', token, options).json({
+                    success: true,
                     token,
+                    user
                 })
+                next()
             }
             else {
                 return res.status(400).json({ message: 'Incorrect password' })

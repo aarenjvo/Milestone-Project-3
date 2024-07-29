@@ -1,24 +1,26 @@
-// const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken')
 
-// const verifyToken = async (req, res, next) => {
-//     try {
-//         let token = req.header('Authorization')
+const auth = (req, res, next) => {
+    // grab token from cookie
+    console.log(req.cookies)
+    const { token } = req.cookies
+    // if no token, stop there
+    if (!token) {
+        res.status(403).send('Please login first')
+    }
+    // decode that token and get id
+    try {
+        const decode = jwt.verify(token, process.env.JWT_SECRET)
+        req.user = decode
+        console.log(decode)
+        console.log('Successfully verified token!')
+    } catch (error) {
+        console.log(error)
+        res.status(401).send('Invalid token')
+    }
+    // query to DB for that user id
 
-//         if(!token) {
-//             return res.status(403).send('Access Denied')
-//         }
+    return next()
+}
 
-//         if(token.startsWith('Tup ')) {
-//             token = token.slice(7, token.length).trimLeft()
-//         }
-
-//         const verified = jwt.verify(token, process.env.JWT_SECRET)
-//         req.user = verified
-//         next()
-
-//     } catch (error) {
-//         res.status(500).json({ error: error.message })
-//     }
-// }
-
-// module.exports = verifyToken
+module.exports = auth

@@ -30,9 +30,9 @@ function Login({onClose}) {
 
         if (response.status === 201) {
             setCurrentUser(data.user);
+            localStorage.setItem('token', data.token)
             console.log('Successfully logged in user!');
             navigate('/Main');
-            return data.user
         } else {
             setErrorMessage(data.message);
         }
