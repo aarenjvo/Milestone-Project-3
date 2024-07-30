@@ -1,39 +1,58 @@
 import React, { useState, useEffect } from "react";
 import '../Create.css';
-import { useNavigate } from 'react-router' 
+import { useNavigate, useParams } from 'react-router' 
+// import NewCreation from './NewCreation'
 
 function Create({ onClose, onCreate }) {
 
     const navigate = useNavigate()
 
+    const { token } = useParams() 
+
     const [font, setFont] = useState('Arial');
     const [access, setAccess] = useState('Public');
     const [blog, setBlog] = useState({
-        user_id: '',
+        // user_id: '',
         title: '',
         content: '',
         font,
         access
     })
 
-    useEffect(() => {
-        // Retrieve the user_id from local storage or another appropriate place
-        const userId = localStorage.getItem('user_id'); // Adjust according to your storage method
-        setBlog(prevBlog => ({ ...prevBlog, user_id: userId }));
-    }, []);
+    // useEffect(() => {
+    //     // Retrieve the user_id from local storage or another appropriate place
+    //     const userId = localStorage.getItem('user_id'); // Adjust according to your storage method
+    //     setBlog(prevBlog => ({ ...prevBlog, user_id: userId }));
+    // }, []);
+
+    // useEffect(() => {
+	// 	const fetchData = async () => {
+	// 		const response = await fetch(`http://localhost:5001/user/:id`)
+	// 		const resData = await response.json()
+	// 		setBlog(resData)
+	// 	}
+	// 	fetchData()
+	// }, [token])
 
 
     async function handleSubmit(e) {
 		e.preventDefault()
 
-		await fetch(`http://localhost:5001/blog/post`, {
+		const response = await fetch(`http://localhost:5001/user/post`, {
 			method: 'POST',
 			headers: {
-                'Authorization': `Bearer ${localStorage.getItem('user_id')}`,
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify(blog)
 		}, console.log('Successfully created a blog!'))
+        const data = await response.json()
+        console.log(data)
+
+        setBlog({
+            ...blog
+        })
+
         onCreate(blog)
         onClose()
 		navigate('/testing')

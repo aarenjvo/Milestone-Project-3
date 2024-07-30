@@ -2,8 +2,9 @@ import { createContext, useState, useEffect, useContext } from "react";
 
 export const CurrentUserContext = createContext(); // Changed to CurrentUserContext
 
-function CurrentUserProvider({ children }) {
-    const [currentUser, setCurrentUser] = useState(null);
+function CurrentUserProvider({ children }){
+
+    const [currentUser, setCurrentUser] = useState(null)
 
     useEffect(() => {
         const getLoggedInUser = async () => {

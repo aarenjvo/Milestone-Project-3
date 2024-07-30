@@ -39,7 +39,10 @@ const userSchema = new mongoose.Schema({
     admin: {
         type: Boolean,
         default: false
-    }
+    },
+    token: {
+        type: String
+        }
 },
     { toJSON: { virtuals: true } },
     { timestamps: true }

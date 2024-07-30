@@ -1,5 +1,6 @@
 const router = require('express').Router()
-const User = require('../models/User')
+const User = require('../models/user')
+const BlogPost = require('../models/BlogPost')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const auth = require('../middleware/auth')
@@ -19,6 +20,68 @@ router.get('/:id', async (req, res) => {
     } catch (error) {
         console.log('Error', error)
         res.status(400).json({ message: 'error retrieving user' })
+    }
+})
+
+// router.post('/:userId/post', async (req, res) => {
+//     const { userId } = req.params
+
+//     // const user = await User.findById(id).populate({ path: 'blogposts', select: ['title', 'description'] })
+//     // res.status(200).json(user)
+//     const user = await User.findOne({
+//         where: { _id: userId }
+//     })
+//     if (!user) {
+//         res.status(404).json({ message: `Could not find user with id ${userId}` })
+//     }
+
+//     const blogPost = await new BlogPost({
+//         ...req.body,
+//     })
+
+//     res.send({
+//         ...blogPost.toJSON(),
+//         user
+//     })
+// })
+
+router.post('/post', async (req, res) => {
+    const { token } = req.body
+    console.log(req.body)
+    try {
+        const user = await User.findOne({ token })
+        if (user) {
+            console.log('User found!')
+            const verify = jwt.sign(
+                { id: user._id, token: user.token },
+                process.env.JWT_SECRET,
+                {
+                    expiresIn: '1d',
+                },
+            )
+
+            user.token = verify
+
+            // cookie section
+            const options = {
+                expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+                httpOnly: true
+            }
+            res.status(201).cookie('token', token, options).json({
+                success: true,
+                token,
+                user
+            })
+        const blogPost = await new BlogPost({
+            user_id: user._id,
+            title: '',
+            content: ''
+        }).save()
+        res.json(blogPost)
+        }
+    } catch (error) {
+        console.log('Error', error)
+        res.status(500).json({ message: 'error creating blog post'})
     }
 })
 

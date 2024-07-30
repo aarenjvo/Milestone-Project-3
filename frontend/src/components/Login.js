@@ -29,7 +29,7 @@ function Login({onClose}) {
         const data = await response.json();
         console.log(data);
 
-        if (response.status === 201) {
+        if (response.ok) {
             setCurrentUser(data.user);
             localStorage.setItem('token', data.token)
             console.log('Successfully logged in user!');
