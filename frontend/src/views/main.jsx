@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { createContext, useState } from "react";
 import Create from "../components/Create";
 import { useNavigate } from "react-router-dom"; 
 import { FacebookShareButton, TwitterShareButton, FacebookIcon, TwitterIcon } from 'react-share';
+import { useCurrentUser } from "../contexts/CurrentUser";
 
 function Main() {
   const navigate = useNavigate();
     const [showCreatePopup, setShowCreatePopup] = useState(false);
+    const { currentUser } = useCurrentUser();
     
   const handleCreateClick = () => {
     setShowCreatePopup(true);
@@ -35,7 +37,7 @@ function Main() {
             <div className="welcome">
             <h1>Welcome!</h1>
             <h3>This is a project created by Freddy Diaz, Aaren Vo, Anthony Deguire, and Tj Jones</h3>
-            <h3>If you're seeing this, our records indicate that you've signed in. Cheers.</h3>
+            <h3>If you're seeing this, our records indicate that you've signed in as {currentUser?.username} . Cheers.</h3>
             <FacebookShareButton
             url={currentPageUrl}
             quote="Share This Post on Facebook!"
