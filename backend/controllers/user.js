@@ -83,7 +83,7 @@ router.post('/login', async (req, res, next) => {
                     token,
                     user
                 })
-                next()
+                
             }
             else {
                 return res.status(400).json({ message: 'Incorrect password' })

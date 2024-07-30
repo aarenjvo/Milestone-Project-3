@@ -1,11 +1,11 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router";
-import { CurrentUser } from "../contexts/CurrentUser";
+import { CurrentUserContext } from '../contexts/CurrentUser';
 import '../Login.css'
 
 function Login({onClose}) {
     const navigate = useNavigate();
-    const { setCurrentUser } = useContext(CurrentUser);
+    const { setCurrentUser } = useContext(CurrentUserContext);
 
     const [credentials, setCredentials] = useState({
         email: '',
