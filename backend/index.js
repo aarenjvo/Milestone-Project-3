@@ -9,7 +9,7 @@ const userController = require('./controllers/user');
 const blogPostController = require('./controllers/blogPost');
 const AuthenticationController = require('./controllers/authentication')
 const User = require('./models/User');
-const cookieParser = require('cookie-parser')
+// const cookieParser = require('cookie-parser')
 const jwt = require('jsonwebtoken')
 const auth = require('./middleware/auth');
 
@@ -22,7 +22,7 @@ app.use(cors({
 app.use(bodyParser.json())
 // Middleware
 app.use(express.json())
-app.use(cookieParser())
+// app.use(cookieParser())
 // app.use(defineCurrentUser)
 app.use(methodOverride('_method'))
 app.use(express.urlencoded({ extended: true }))
