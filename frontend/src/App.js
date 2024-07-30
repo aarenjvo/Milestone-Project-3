@@ -8,6 +8,7 @@ import Login from './components/Login'
 import CurrentUserProvider from './contexts/CurrentUser';
 import Main from './views/main';
 import BlogList from './views/BlogList';
+import NewBlog from './views/NewBlog';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route exact path="/Creation" element={<Creation />} />
             <Route exact path="/Main" element={<Main/>} />
             <Route exact path="/view"element={<BlogList/>}/>
+            <Route exact path="/testing" element={<NewBlog/>}/>
           </Routes>
         </Router>
       </CurrentUserProvider>
