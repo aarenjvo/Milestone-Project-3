@@ -20,6 +20,7 @@ function Login({onClose}) {
             method: 'POST',
             credentials: 'include',
             headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(credentials)
@@ -30,6 +31,7 @@ function Login({onClose}) {
 
         if (response.status === 201) {
             setCurrentUser(data.user);
+            localStorage.setItem('token', data.token)
             console.log('Successfully logged in user!');
             navigate('/Main');
         } else {
