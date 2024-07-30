@@ -20,6 +20,7 @@ function Login({onClose}) {
             method: 'POST',
             credentials: 'include',
             headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(credentials)

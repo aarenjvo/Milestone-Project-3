@@ -7,11 +7,11 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const userController = require('./controllers/user');
 const blogPostController = require('./controllers/blogPost');
+const AuthenticationController = require('./controllers/authentication')
+const User = require('./models/User');
 const cookieParser = require('cookie-parser')
 const jwt = require('jsonwebtoken')
 const auth = require('./middleware/auth');
-// const defineCurrentUser = require('./middleware/defineCurrentUser')
-const User = require('./models/User');
 
 // Express Settings
 app.use(cors({
@@ -35,34 +35,11 @@ app.engine('jsx', require('express-react-views').createEngine())
 // Routes
 app.use('/user', userController)
 app.use('/blog', blogPostController)
+app.use('/authentication', AuthenticationController)
 
 app.get('/profile', auth, (req, res) => {
     res.json(req.user)
 })
-
-// app.get('/profile', async (req, res) => {
-//     try {
-//         // Split the authorization header into [ 'Bearer', 'TOKEN' ]
-//         const [authenticationMethod, token] = req.headers.authorization.split(' ')
-
-//         // Only handle 'Bearer' authorization for now
-//         if (authenticationMethod == 'Bearer') {
-//             const result = await jwt.decode(process.env.JWT_SECRET, token)
-
-//             const { id } = result.valueOf
-
-//             // Find the user object using their id:
-//             let user = await User.findOne({
-//                 where: {
-//                     _id: id
-//                 }
-//             })
-//             res.json(user)
-//         }
-//     } catch {
-//         res.json(null)
-//     }
-// })
 
 // DB Connection
 mongoose.connect(process.env.MONGO_URI)
