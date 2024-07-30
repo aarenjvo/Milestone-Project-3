@@ -1,9 +1,23 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useCurrentUser } from "../contexts/CurrentUser";
 
 const NewBlog = () => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [author, setAuthor] = useState('');
+  const { currentUser } = useCurrentUser();
+
+  useEffect(() => {
+    if (currentUser) {
+      setAuthor(currentUser.username); // Set author to current user's username
+    }
+  }, [currentUser]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Handle blog submission
+  };
+
 
   return (
     <div className="create">
@@ -23,19 +37,10 @@ const NewBlog = () => {
         onChange={(e) => setBody(e.target.value)}
         ></textarea>
         <label>Blog author:</label>
-        <select
-          value={author}
-          onChange={(e) => setAuthor(e.target.value)}
-        >
-          <option value="Anthony">Anthony</option>
-          <option value="Freddy">Freddy</option>
-          <option value="TJ">TJ</option>
-          <option value="Aaren">Aaren</option>
-        </select>
-        <button>Add Blog</button>
-        <p>{ title }</p>
-        <p>{ body }</p>
-        <p>{ author }</p>
+        <p>{author}</p>
+        <button type="submit">Add Blog</button>
+        <p>{title}</p>
+        <p>{body}</p>
       </form>
     </div>
   )

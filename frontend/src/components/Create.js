@@ -36,7 +36,7 @@ function Create({ onClose, onCreate }) {
 		}, console.log('Successfully created a blog!'))
         onCreate(blog)
         onClose()
-		navigate('/')
+		navigate('/testing')
 	}
 
     return (

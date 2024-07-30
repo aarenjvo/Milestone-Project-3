@@ -20,15 +20,15 @@ router.get('/:id', async (req, res) => {
     }
 })
 
-// router.post('/post', auth, async (req, res) => {
-//     try {
-//         const blogPost = await new BlogPost(req.body).save()
-//         res.json(blogPost)
-//     } catch (error) {
-//         console.log('Error', error)
-//         res.status(500).json({ message: 'error creating blog post'})
-//     }
-// })
+router.post('/post', auth, async (req, res) => {
+    try {
+        const blogPost = await new BlogPost(req.body).save()
+        res.json(blogPost)
+    } catch (error) {
+        console.log('Error', error)
+        res.status(500).json({ message: 'error creating blog post'})
+    }
+})
 
 router.post('/post', async (req, res) => {
     const { token } = req.body
