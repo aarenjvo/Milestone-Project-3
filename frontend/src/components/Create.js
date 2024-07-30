@@ -29,7 +29,7 @@ function Create({ onClose, onCreate }) {
 		await fetch(`http://localhost:5001/blog/post`, {
 			method: 'POST',
 			headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Authorization': `Bearer ${localStorage.getItem('user_id')}`,
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify(blog)
