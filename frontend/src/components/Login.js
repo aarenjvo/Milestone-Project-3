@@ -16,11 +16,11 @@ function Login({onClose}) {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        const response = await fetch(`http://localhost:5001/user/login/`, {
+        const response = await fetch(`http://localhost:5001/authentication/`, {
             method: 'POST',
             credentials: 'include',
             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                // 'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(credentials)
@@ -29,9 +29,9 @@ function Login({onClose}) {
         const data = await response.json();
         console.log(data);
 
-        if (response.ok) {
+        if (response.status === 200) {
             setCurrentUser(data.user);
-            localStorage.setItem('token', data.token)
+            // localStorage.setItem('token', data.token)
             console.log('Successfully logged in user!');
             navigate('/Main');
         } else {

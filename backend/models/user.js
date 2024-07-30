@@ -3,6 +3,11 @@ const bcrypt = require('bcrypt')
 
 
 const userSchema = new mongoose.Schema({
+    userId: {
+        type: Number,
+        unique: true,
+        default: null
+    },
     username: {
         type: String,
         required: true,
@@ -39,10 +44,10 @@ const userSchema = new mongoose.Schema({
     admin: {
         type: Boolean,
         default: false
-    },
-    token: {
-        type: String
-        }
+    }
+    // token: {
+    //     type: String
+    //     }
 },
     { toJSON: { virtuals: true } },
     { timestamps: true }

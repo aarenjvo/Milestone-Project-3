@@ -1,16 +1,19 @@
-import React, { createContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import Create from "../components/Create";
 import { useNavigate } from "react-router-dom"; 
 import { FacebookShareButton, TwitterShareButton, FacebookIcon, TwitterIcon } from 'react-share';
-import { useCurrentUser } from "../contexts/CurrentUser";
+// import { useCurrentUser } from "../contexts/CurrentUser";
+import { CurrentUserContext } from "../contexts/CurrentUser";
+import { Link } from "react-router-dom";
 
 function Main() {
   const navigate = useNavigate();
     const [showCreatePopup, setShowCreatePopup] = useState(false);
-    const { currentUser } = useCurrentUser();
+    const { currentUser } = useContext(CurrentUserContext);
     
   const handleCreateClick = () => {
-    setShowCreatePopup(true);
+    setShowCreatePopup(true)
+    // navigate(`/user/:id`)
   };
 
   const handleCloseCreatePopup = () => {
@@ -23,9 +26,32 @@ function Main() {
   };
 
   const handleViewPostsClick = () => {
-    navigate('/view'); // Navigate to /view route
+    navigate('/blog'); // Navigate to /view route
   };
 
+
+  let loginActions = (
+    <>
+        <li style={{ float: 'right' }}>
+            <Link to="/sign-up" onClick={() => navigate("/sign-up")}>
+                Sign Up
+            </Link>
+        </li>
+        <li style={{ float: 'right' }}>
+            <Link to="/login" onClick={() => navigate("/login")}>
+                Login
+            </Link>
+        </li>
+    </>
+)
+
+if (currentUser) {
+    loginActions = (
+        <li style={{ float: 'right' }}>
+            Logged in as {currentUser.username}
+        </li>
+    )
+}
 
   const currentPageUrl = "/main";
     return (
@@ -33,6 +59,8 @@ function Main() {
             <nav> <a href="#" onClick={handleCreateClick}><h3>Make your creation</h3></a>
             <div className="title"><h2>TupGPT</h2></div>
             <a href="#" onClick={handleViewPostsClick}><h3>View Posts</h3></a>
+            {/* <Link to='/blog' onClick={() => navigate('/blog')}>View Blogs</Link> */}
+            {loginActions}
             </nav>
             <div className="welcome">
             <h1>Welcome!</h1>

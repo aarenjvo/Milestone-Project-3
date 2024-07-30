@@ -3,7 +3,7 @@ const User = require('../models/user')
 const BlogPost = require('../models/BlogPost')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
-const auth = require('../middleware/auth')
+// const auth = require('../middleware/auth')
 require('dotenv').config()
 // const verifyToken = require('../middleware/auth')
 
@@ -23,143 +23,50 @@ router.get('/:id', async (req, res) => {
     }
 })
 
-// router.post('/:userId/post', async (req, res) => {
-//     const { userId } = req.params
-
-//     // const user = await User.findById(id).populate({ path: 'blogposts', select: ['title', 'description'] })
-//     // res.status(200).json(user)
-//     const user = await User.findOne({
-//         where: { _id: userId }
-//     })
-//     if (!user) {
-//         res.status(404).json({ message: `Could not find user with id ${userId}` })
-//     }
-
-//     const blogPost = await new BlogPost({
-//         ...req.body,
-//     })
-
-//     res.send({
-//         ...blogPost.toJSON(),
-//         user
-//     })
-// })
-
-router.post('/post', async (req, res) => {
-    const { token } = req.body
-    console.log(req.body)
-    try {
-        const user = await User.findOne({ token })
-        if (user) {
-            console.log('User found!')
-            const verify = jwt.sign(
-                { id: user._id, token: user.token },
-                process.env.JWT_SECRET,
-                {
-                    expiresIn: '1d',
-                },
-            )
-
-            user.token = verify
-
-            // cookie section
-            const options = {
-                expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-                httpOnly: true
-            }
-            res.status(201).cookie('token', token, options).json({
-                success: true,
-                token,
-                user
-            })
-        const blogPost = await new BlogPost({
-            user_id: user._id,
-            title: '',
-            content: ''
-        }).save()
-        res.json(blogPost)
-        }
-    } catch (error) {
-        console.log('Error', error)
-        res.status(500).json({ message: 'error creating blog post'})
-    }
+router.post('/', async (req, res) => {
+    let { password, ...rest } = req.body
+    const user = await new User(req.body).save()
+    res.json(user)
 })
 
-router.post('/register', async (req, res) => {
+router.post('/:id/blogs', async (req, res) => {
+    const { id } = req.params
+
+    const user = await User.findOne({ _id: id })
+
+    if (!user) {
+        res.status(404).json({ message: `Could not find place with id "${id}"` })
+    }
+
+    let currentUser;
     try {
-        const { username, email, password, ...rest } = req.body
-        let user = await User.findOne({ email })
+        currentUser = await User.findOne({ _id: req.session._id})
+    } catch {
+        currentUser = null
+    }
 
-        if (user) {
-            return res.status(400).json({ message: 'User already registered' })
-        }
-
-        user = await new User(req.body).save()
-
-        // generate a token
-        const token = jwt.sign({ id: user._id, }, process.env.JWT_SECRET, {
-            expiresIn: '1d',
+    if (!currentUser) {
+        return res.status(404).json({
+            message: `You must be logged in to create a blog`
         })
-
-        return res.status(201).json({
-            user: {
-                _id: user._id,
-                username: user.username,
-                age: user.age,
-                email: user.email,
-                verified: user.verified,
-                admin: user.admin,
-            },
-            token
-        })
-    } catch (error) {
-        console.log('error:', error)
-        return res.status(500).json({ message: 'error creating user' })
     }
+
+    // const author = await User.findOne({ _id: req.body.user_id })
+
+    // if (!author) {
+    //     res.status(404).json({ message: `Could not find author with id "${req.body.user_id}"` })
+    // }
+
+    const blog = await BlogPost.create({
+        ...req.body,
+        user_id: id,
+    })
+
+    res.send({
+        ...blog.toJSON(),
+        author: currentUser
+    })
 })
-
-router.post('/login', async (req, res, next) => {
-    const { email, password } = req.body
-    try {
-        const user = await User.findOne({ email })
-        if (user) {
-            const passwordMatch = await bcrypt.compare(password, user.password)
-            if (passwordMatch) {
-                const token = jwt.sign(
-                    { id: user._id, email: user.email },
-                    process.env.JWT_SECRET,
-                    {
-                        expiresIn: '1d',
-                    },
-                )
-
-                user.token = token
-                user.password = undefined
-
-                // cookie section
-                const options = {
-                    expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-                    httpOnly: true
-                }
-                res.status(201).cookie('token', token, options).json({
-                    success: true,
-                    token,
-                    user
-                })
-                
-            }
-            else {
-                return res.status(400).json({ message: 'Incorrect password' })
-            }
-        }
-        else {
-            return res.status(400).json({ message: 'No user found with this email' })
-        }
-    } catch (error) {
-        res.status(500).json({ message: 'Login failed' })
-    }
-})
-
 
 router.put('/:id', async (req, res) => {
     try {

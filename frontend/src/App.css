@@ -43,6 +43,11 @@ nav h3 {
   color: #b0aeae;
 }
 
+nav li {
+  list-style: none;
+  color: white;
+}
+
 .welcome {
   color: #051923;
   text-align: center;

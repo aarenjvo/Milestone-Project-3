@@ -10,9 +10,9 @@ function CurrentUserProvider({ children }){
         const getLoggedInUser = async () => {
             try {
                 let response = await fetch('http://localhost:5001/authentication/profile', {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    },
+                    // headers: {
+                    //     'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    // },
                     credentials: 'include'
                 });
                 if (response.ok) {

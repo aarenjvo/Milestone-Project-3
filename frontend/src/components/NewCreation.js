@@ -1,77 +1,102 @@
-import { useState, useEffect } from "react"
-import { useNavigate } from "react-router"
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router'
+import BlogCard from './BlogCard'
+import Create from './Create'
 
-function NewCommentForm({ place, onSubmit }) {
+function NewCreation() {
 
-    const [authors, setAuthors] = useState([])
+    const { id } = useParams()
 
-    const [blog, setBlog] = useState({
-        user_id: '',
-        title: '',
-        content: ''
-    })
+    const navigate = useNavigate()
+
+    const [user, setUser] = useState(null)
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await fetch(`http://localhost:5001/users`)
-            const users = await response.json()
-            setBlog({ ...blog, user_id: users[0]?._id })
-            setAuthors(users)
+            const response = await fetch(`http://localhost:5001/user/${id}`)
+            const resData = await response.json()
+            setUser(resData)
         }
         fetchData()
-    }, [])
+    }, [id])
 
-    let authorOptions = authors.map(author => {
-        return <option key={author._id} value={author._id}>{author.username}</option>
-    })
+    if (user === null) {
+        return <h1>Loading</h1>
+    }
 
-    function handleSubmit(e) {
-        e.preventDefault()
-        onSubmit(blog)
-        setBlog({
-            user_id: authors[0]?._id,
-            title: '',
-            content: '',
+    async function createBlog(blogAttributes) {
+        const response = await fetch(`http://localhost:5001/user/${id}/blogs`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(blogAttributes)
+        })
+
+        const blog = await response.json()
+
+        setUser({
+            ...user,
+            blogs: [
+                ...user.blogs,
+                blog
+            ]
+        })
+        navigate(`/blog`)
+    }
+
+
+
+    let blogs = (
+        <h3 className="inactive">
+            No blogs yet!
+        </h3>
+    )
+    let title = (
+        <h3 className="inactive">
+            No Title yet
+        </h3>
+    )
+    if (user.blogs.length) {
+        title = (
+            <h3>
+                Here is your first post!
+            </h3>
+        )
+        blogs = user.blogs.map(blog => {
+            return (
+                <BlogCard key={blog.user_id} blog={blog} />
+            )
         })
     }
 
+
     return (
-        <form onSubmit={handleSubmit}>
+        <main>
             <div className="row">
-                <div className="form-group col-sm-12">
-                    <label htmlFor="title">Title</label>
-                    <textarea
-                        required
-                        value={blog.title}
-                        onChange={e => setBlog({ ...blog, title: e.target.value })}
-                        className="form-control"
-                        id="title"
-                        name="title"
-                    />
-                </div>
-                <div className="form-group col-sm-12">
-                    <label htmlFor="content">Content</label>
-                    <textarea
-                        required
-                        value={blog.content}
-                        onChange={e => setBlog({ ...blog, content: e.target.value })}
-                        className="form-control"
-                        id="content"
-                        name="content"
+                {/* <div className="col-sm-6">
+                    <img style={{ maxWidth: 200 }} src={user.pic} alt={user.username} />
+                    <h3>
+                        Located in {user.city}, {user.state}
+                    </h3>
+                </div> */}
+                <div className="col-sm-6">
+                    <h1>{user.username}</h1>
+                    <h2>
+                        Title
+                    </h2>
+                    {title}
+                    <br />
+                    <h2>Post a Blog</h2>
+                    <Create
+                        user={user}
+                        onSubmit={createBlog}
                     />
                 </div>
             </div>
-            <div className="row">
-                <div className="form-group col-sm-4">
-                    <label htmlFor="state">Author</label>
-                    <select className="form-control" value={blog.user_id} onChange={e => setBlog({ ...blog, user_id: e.target.value })}>
-                        {authorOptions}
-                    </select>
-                </div>
-            </div>
-            <input className="btn btn-primary" type="submit" value="Add Comment" />
-        </form>
+        </main>
     )
 }
 
-export default NewCommentForm
+export default NewCreation
