@@ -1,35 +1,66 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import '../Create.css';
+import { useNavigate } from 'react-router' 
 
 function Create({ onClose, onCreate }) {
-    const [documentName, setDocumentName] = useState('');
+
+    const navigate = useNavigate()
+
     const [font, setFont] = useState('Arial');
     const [access, setAccess] = useState('Public');
+    const [blog, setBlog] = useState({
+        user_id: '',
+        title: '',
+        content: '',
+        font,
+        access
+    })
 
-    const handleCreateClick = () => {
-        const documentData = {
-            documentName,
-            font,
-            access,
-            content: ''
-        };
+    useEffect(() => {
+        // Retrieve the user_id from local storage or another appropriate place
+        const userId = localStorage.getItem('user_id'); // Adjust according to your storage method
+        setBlog(prevBlog => ({ ...prevBlog, user_id: userId }));
+    }, []);
 
-        onCreate(documentData);
-        onClose();
-    };
+
+    async function handleSubmit(e) {
+		e.preventDefault()
+
+		await fetch(`http://localhost:5001/blog/post`, {
+			method: 'POST',
+			headers: {
+                'Authorization': `Bearer ${localStorage.getItem('user_id')}`,
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(blog)
+		}, console.log('Successfully created a blog!'))
+        onCreate(blog)
+        onClose()
+		navigate('/')
+	}
 
     return (
+        <form onSubmit={handleSubmit}>
         <div className="create-popup">
             <div className="create-header">
                 <h2>Create New Document</h2>
             </div>
             <div className="create-field">
-                <label htmlFor="documentName">Document Name:</label>
+                <label htmlFor="documentName">Document Title:</label>
                 <input
                     type="text"
                     id="documentName"
-                    value={documentName}
-                    onChange={(e) => setDocumentName(e.target.value)}
+                    value={blog.title}
+                    onChange={(e) => setBlog({ ...blog, title: e.target.value })}
+                />
+            </div>
+            <div className="create-content">
+                <label htmlFor="documentContent">Content:</label>
+                <input
+                    type="text"
+                    id="documentContent"
+                    value={blog.content}
+                    onChange={(e) => setBlog({ ...blog, content: e.target.value })}
                 />
             </div>
             <div className="create-settings">
@@ -59,7 +90,7 @@ function Create({ onClose, onCreate }) {
                 </div>
             </div>
             <div className="create-buttons">
-                <button onClick={handleCreateClick} className="create-button create-button-green">
+                <button onClick={handleSubmit} className="create-button create-button-green">
                     Create Document
                 </button>
                 <button onClick={onClose} className="create-button create-button-gray">
@@ -67,6 +98,7 @@ function Create({ onClose, onCreate }) {
                 </button>
             </div>
         </div>
+        </form>
     );
 }
 

@@ -7,6 +7,11 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const userController = require('./controllers/user');
 const blogPostController = require('./controllers/blogPost');
+const AuthenticationController = require('./controllers/authentication')
+const User = require('./models/User');
+// const cookieParser = require('cookie-parser')
+const jwt = require('jsonwebtoken')
+// const auth = require('./middleware/auth');
 
 // Express Settings
 app.use(cors({
@@ -15,11 +20,12 @@ app.use(cors({
 }))
 
 app.use(bodyParser.json())
-
 // Middleware
 app.use(express.json())
+// app.use(cookieParser())
+// app.use(defineCurrentUser)
 app.use(methodOverride('_method'))
-app.use(express.urlencoded({extended: true}))
+app.use(express.urlencoded({ extended: true }))
 app.use(express.static('public'))
 app.set('views', __dirname + '/views')
 app.set('view engine', 'jsx')
@@ -29,7 +35,11 @@ app.engine('jsx', require('express-react-views').createEngine())
 // Routes
 app.use('/user', userController)
 app.use('/blog', blogPostController)
+app.use('/authentication', AuthenticationController)
 
+// app.get('/profile', auth, (req, res) => {
+//     res.json(req.user)
+// })
 
 // DB Connection
 mongoose.connect(process.env.MONGO_URI)

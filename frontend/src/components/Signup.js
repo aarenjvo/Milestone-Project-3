@@ -5,6 +5,9 @@ import '../SignUp.css'
 function Signup({onClose}) {
     const navigate = useNavigate();
 
+    const [error, setError] = useState(null)
+    const [isLoading, setIsLoading] = useState(null)
+
     const [user, setUser] = useState({
         username: '',
         age: '',
@@ -14,14 +17,18 @@ function Signup({onClose}) {
 
     async function handleSubmit(e) {
         e.preventDefault();
+        setIsLoading(true)
+        setError(null)
 
         await fetch(`http://localhost:5001/user/register`, {
             method: 'POST',
             headers: {
+                'Authorization': 'Bearer ',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(user)
         }, console.log('Successfully created user!'));
+        localStorage.setItem('user', JSON.stringify(user))
         navigate(`/`);
     }
     
