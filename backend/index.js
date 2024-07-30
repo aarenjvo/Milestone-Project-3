@@ -11,7 +11,7 @@ const AuthenticationController = require('./controllers/authentication')
 const User = require('./models/User');
 // const cookieParser = require('cookie-parser')
 const jwt = require('jsonwebtoken')
-const auth = require('./middleware/auth');
+// const auth = require('./middleware/auth');
 
 // Express Settings
 app.use(cors({
@@ -37,9 +37,9 @@ app.use('/user', userController)
 app.use('/blog', blogPostController)
 app.use('/authentication', AuthenticationController)
 
-app.get('/profile', auth, (req, res) => {
-    res.json(req.user)
-})
+// app.get('/profile', auth, (req, res) => {
+//     res.json(req.user)
+// })
 
 // DB Connection
 mongoose.connect(process.env.MONGO_URI)

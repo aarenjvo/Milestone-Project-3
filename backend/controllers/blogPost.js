@@ -20,55 +20,55 @@ router.get('/:id', async (req, res) => {
     }
 })
 
-router.post('/post', auth, async (req, res) => {
-    try {
-        const blogPost = await new BlogPost(req.body).save()
-        res.json(blogPost)
-    } catch (error) {
-        console.log('Error', error)
-        res.status(500).json({ message: 'error creating blog post'})
-    }
-})
-
-// router.post('/post', async (req, res) => {
-//     const { token } = req.body
-//     console.log(req.body)
+// router.post('/post', auth, async (req, res) => {
 //     try {
-//         const user = await User.findOne({ token })
-//         if (user) {
-//             console.log('User found!')
-//             const verify = jwt.sign(
-//                 { id: user._id, token: user.token },
-//                 process.env.JWT_SECRET,
-//                 {
-//                     expiresIn: '1d',
-//                 },
-//             )
-
-//             user.token = verify
-
-//             // cookie section
-//             const options = {
-//                 expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-//                 httpOnly: true
-//             }
-//             res.status(201).cookie('token', token, options).json({
-//                 success: true,
-//                 token,
-//                 user
-//             })
-//         const blogPost = await new BlogPost({
-//             user_id: id,
-//             title: '',
-//             content: ''
-//         }).save()
+//         const blogPost = await new BlogPost(req.body).save()
 //         res.json(blogPost)
-//         }
 //     } catch (error) {
 //         console.log('Error', error)
 //         res.status(500).json({ message: 'error creating blog post'})
 //     }
 // })
+
+router.post('/post', async (req, res) => {
+    const { token } = req.body
+    console.log(req.body)
+    try {
+        const user = await User.findOne({ token })
+        if (user) {
+            console.log('User found!')
+            const verify = jwt.sign(
+                { id: user._id, token: user.token },
+                process.env.JWT_SECRET,
+                {
+                    expiresIn: '1d',
+                },
+            )
+
+            user.token = verify
+
+            // cookie section
+            const options = {
+                expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+                httpOnly: true
+            }
+            res.status(201).cookie('token', token, options).json({
+                success: true,
+                token,
+                user
+            })
+        const blogPost = await new BlogPost({
+            user_id: id,
+            title: '',
+            content: ''
+        }).save()
+        res.json(blogPost)
+        }
+    } catch (error) {
+        console.log('Error', error)
+        res.status(500).json({ message: 'error creating blog post'})
+    }
+})
 
   
 
