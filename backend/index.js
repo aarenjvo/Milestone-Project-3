@@ -13,7 +13,7 @@ const jwt = require('jsonwebtoken')
 
 // Express Settings
 app.use(cors({
-    origin: 'https://milestone-project-3-frontend.onrender.com',
+    origin: 'https://milestone-project-3-backend.onrender.com/',
     credentials: true
 }))
 
