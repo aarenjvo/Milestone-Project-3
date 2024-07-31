@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const BlogPost = require('../models/BlogPost')
-const User = require('../models/User')
+const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 const auth = require('../middleware/auth')
 require('dotenv').config()
