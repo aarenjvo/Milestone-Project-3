@@ -1,13 +1,13 @@
-import React, { createContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import Create from "../components/Create";
 import { useNavigate } from "react-router-dom"; 
 import { FacebookShareButton, TwitterShareButton, FacebookIcon, TwitterIcon } from 'react-share';
-import { useCurrentUser } from "../contexts/CurrentUser";
+import { CurrentUserContext } from "../contexts/CurrentUser";
 
 function Main() {
   const navigate = useNavigate();
     const [showCreatePopup, setShowCreatePopup] = useState(false);
-    const { currentUser } = useCurrentUser();
+    const { currentUser } = useContext(CurrentUserContext)
     
   const handleCreateClick = () => {
     setShowCreatePopup(true);
@@ -25,6 +25,29 @@ function Main() {
   const handleViewPostsClick = () => {
     navigate('/view'); // Navigate to /view route
   };
+
+  let loginActions = (
+    <>
+        <li style={{ float: 'right' }}>
+            <a href="#" onClick={() => navigate("/sign-up")}>
+                Sign Up
+            </a>
+        </li>
+        <li style={{ float: 'right' }}>
+            <a href="#" onClick={() => navigate("/login")}>
+                Login
+            </a>
+        </li>
+    </>
+)
+
+if (currentUser) {
+    loginActions = (
+        <li style={{ float: 'right' }}>
+            Logged in as {currentUser.username}
+        </li>
+    )
+}
 
 
   const currentPageUrl = "/main";
