@@ -8,7 +8,7 @@ function CurrentUserProvider({ children }) {
     useEffect(() => {
         const getLoggedInUser = async () => {
             try {
-                let response = await fetch('http://localhost:5001/authentication/profile', {
+                let response = await fetch('https://milestone-project-3-backend.onrender.com/authentication/profile', {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
                     },

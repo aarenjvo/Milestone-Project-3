@@ -26,7 +26,7 @@ function Create({ onClose, onCreate }) {
     async function handleSubmit(e) {
 		e.preventDefault()
 
-		await fetch(`http://localhost:5001/blog/post`, {
+		await fetch(`https://milestone-project-3-backend.onrender.com/blog/post`, {
 			method: 'POST',
 			headers: {
                 'Authorization': `Bearer ${localStorage.getItem('user_id')}`,

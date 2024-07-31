@@ -20,7 +20,7 @@ function Signup({onClose}) {
         setIsLoading(true)
         setError(null)
 
-        await fetch(`http://localhost:5001/user/register`, {
+        await fetch(`https://milestone-project-3-backend.onrender.com/user/register`, {
             method: 'POST',
             headers: {
                 'Authorization': 'Bearer ',
