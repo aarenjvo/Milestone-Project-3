@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "proxy": "https://milestone-project-3-backend.onrender.com/",
   "scripts": {
     "start": "nodemon index",
     "dev": "npx nodemon index.js",
