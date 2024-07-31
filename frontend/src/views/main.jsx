@@ -56,6 +56,7 @@ if (currentUser) {
             <nav> <a href="#" onClick={handleCreateClick}><h3>Make your creation</h3></a>
             <div className="title"><h2>TupGPT</h2></div>
             <a href="#" onClick={handleViewPostsClick}><h3>View Posts</h3></a>
+            {loginActions}
             </nav>
             <div className="welcome">
             <h1>Welcome!</h1>
