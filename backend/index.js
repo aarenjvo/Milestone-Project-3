@@ -11,11 +11,18 @@ const AuthenticationController = require('./controllers/authentication')
 // const User = require('./models/User');
 const jwt = require('jsonwebtoken')
 
+const corsOptions = { origin: 'https://milestone-project-3-frontend.onrender.com',
+ methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', 
+ allowedHeaders: 'Content-Type,Authorization', 
+ credentials: true, };
+
+app.use(cors(corsOptions));
+
 // Express Settings
-app.use(cors({
-    origin: 'https://milestone-project-3-backend.onrender.com/',
-    credentials: true
-}))
+// app.use(cors({
+//     origin: 'https://milestone-project-3-frontend.onrender.com/',
+//     credentials: true
+// }))
 
 app.use(bodyParser.json())
 // Middleware
